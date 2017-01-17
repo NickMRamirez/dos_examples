@@ -1,0 +1,50 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  # Use:
+  # cd ~/Saddam
+  # sudo python Saddam.py -d dns.txt:test.com 172.16.0.10
+
+  config.vm.define "target3" do |node|
+    node.vm.box = "gbarbieru/xenial"
+    node.vm.network "private_network", ip: "172.16.0.10"
+    node.vm.hostname = "target3"
+    node.vm.provision "shell", inline: "sudo apt update; sudo apt install nginx tcpdump -y"
+  end
+
+  bind_install = %q{
+    sudo apt update
+    sudo apt install bind9 dnsutils -y
+    sudo service bind9 stop
+    cp -f /vagrant/db.* /vagrant/named.* /etc/bind/
+    sudo service bind9 start
+    echo "nameserver 127.0.0.1" >> /etc/resolvconf/resolv.conf.d/head
+    sudo resolvconf -u
+  }
+
+  config.vm.define "dns3" do |node|
+    node.vm.box = "gbarbieru/xenial"
+    node.vm.network "private_network", ip: "172.16.0.11"
+    node.vm.hostname = "dns3"
+    node.vm.provision "shell", inline: bind_install
+  end
+
+  saddam_install = %q{
+    sudo apt update
+    sudo apt install git python -y
+    git clone https://github.com/OffensivePython/Saddam.git
+    git clone https://github.com/OffensivePython/Pinject.git
+    cp ~/Pinject/pinject.py ~/Saddam/
+    cp /vagrant/dns.txt ~/Saddam
+  }
+
+  config.vm.define "badguy3" do |node|
+    node.vm.box = "gbarbieru/xenial"
+    node.vm.network "private_network", ip: "172.16.0.12"
+    node.vm.hostname = "badguy3"
+    node.vm.provision "shell", inline: saddam_install
+  end
+  
+end

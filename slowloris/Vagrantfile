@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "badguy2" do |node|  
+    node.vm.box = "gbarbieru/xenial"
+    node.vm.network "private_network", ip: "172.16.0.8"
+    node.vm.hostname = "badguy2"
+    node.vm.provision "shell", inline: "sudo apt update; sudo apt install slowhttptest -y"
+
+    # Send slow GET headers
+    # slowhttptest -c 65539 -r 100 -u http://172.16.0.9
+  end
+
+  config.vm.define "target2" do |node|
+    node.vm.box = "gbarbieru/xenial"
+    node.vm.network "private_network", ip: "172.16.0.9"
+    node.vm.hostname = "target2"
+    node.vm.provision "shell", inline: "sudo apt update; sudo apt install nginx tcpdump -y"
+  end
+
+end
