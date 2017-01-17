@@ -34,10 +34,10 @@ Vagrant.configure("2") do |config|
   saddam_install = %q{
     sudo apt update
     sudo apt install git python -y
-    git clone https://github.com/OffensivePython/Saddam.git
     git clone https://github.com/OffensivePython/Pinject.git
-    cp ~/Pinject/pinject.py ~/Saddam/
-    cp /vagrant/dns.txt ~/Saddam
+    git clone https://github.com/OffensivePython/Saddam.git
+    cp -f /vagrant/dns.txt /home/vagrant/Saddam/
+    cp -f /home/vagrant/Pinject/pinject.py /home/vagrant/Saddam/
   }
 
   config.vm.define "badguy3" do |node|
