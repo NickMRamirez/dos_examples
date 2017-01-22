@@ -1,0 +1,10 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config| 
+  config.vm.define "target" do |node|  
+    node.vm.box = "gbarbieru/xenial"
+    node.vm.provision "shell", inline: "chmod +x /vagrant/fork.sh"
+  end
+
+end
