@@ -26,8 +26,8 @@ Vagrant.configure(2) do |config|
   # NOTE: ARP cache lasts for 60 seconds
   # cat /proc/sys/net/ipv4/neigh/default/gc_stale_time
   # SYN floods over the Internet can be done by spoofing an IP that does not respond with RST packets 
-  #  (due to firewall most likely). These are useful for SYN floods. Use nmap to find hosts
-  #  that filter TCP: sudo nmap --scanflags synack 172.16.0.28.
+  #  (due to firewall most likely). These are useful for SYN floods. Use nmap to find hosts that "filter" TCP: 
+  # sudo nmap --scanflags synack 172.16.0.26.
 
   config.vm.define "badguy" do |node|  
     node.vm.box = "gbarbieru/xenial"
@@ -42,7 +42,7 @@ Vagrant.configure(2) do |config|
     node.vm.network "private_network", ip: "172.16.0.27", netmask: "255.255.255.248"
     node.vm.hostname = "target"
 
-    node.vm.provision "shell", inline: "sudo apt update; sudo apt install nginx tcpdump -y"
+    node.vm.provision "shell", inline: "sudo apt update; sudo apt install nginx tcpdump nmap -y"
   end  
 
 end
