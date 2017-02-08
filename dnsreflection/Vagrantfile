@@ -25,28 +25,28 @@ Vagrant.configure("2") do |config|
 
   # Use:
   # cd ~/Saddam
-  # sudo python Saddam.py -d dns.txt:test.com 172.16.0.10
+  # sudo python Saddam.py -d dns.txt:test.com 172.16.0.2
 
   # Monitor traffic with:
   # speedometer -r eth1 -t eth1
 
   config.vm.define "target" do |node|
     node.vm.box = "gbarbieru/xenial"
-    node.vm.network "private_network", ip: "172.16.0.2", netmask: "29"
+    node.vm.network "private_network", ip: "172.16.0.2", netmask: "255.255.255.248"
     node.vm.hostname = "target"
     node.vm.provision "shell", inline: "sudo apt update; sudo apt install nginx tcpdump speedometer -y"
   end
 
   config.vm.define "dns" do |node|
     node.vm.box = "gbarbieru/xenial"
-    node.vm.network "private_network", ip: "172.16.0.3", netmask: "29"
+    node.vm.network "private_network", ip: "172.16.0.3", netmask: "255.255.255.248"
     node.vm.hostname = "dns"
     node.vm.provision "shell", inline: bind_install
   end
 
   config.vm.define "badguy" do |node|
     node.vm.box = "gbarbieru/xenial"
-    node.vm.network "private_network", ip: "172.16.0.4", netmask: "29"
+    node.vm.network "private_network", ip: "172.16.0.4", netmask: "255.255.255.248"
     node.vm.hostname = "badguy"
     node.vm.provision "shell", inline: saddam_install
   end

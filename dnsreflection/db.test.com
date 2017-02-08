@@ -9,7 +9,7 @@ $TTL 604800
 
 @              IN  NS     ns1.test.com.
 ns1.test.com.  IN  A      127.0.0.1
-@              IN  A      172.16.0.10 
+@              IN  A      172.16.0.2
 www.test.com.  IN  CNAME  test.com.
 @              IN  TXT    "1Jas14foRiU1PUnRKkV77XNYguvdPoSztKamkaC7VdGvXEc2Fvx2WFvnc4RfbB34gwIi9qkqa6Oo4sbfdO4ZpKeHPMkziG2SHpdjNTy8Z49TGbeMnbjePq2HaqfIDYVF0zt9Iy5zuiutoNRNWsGyWN9LYteDM3jVGSXpvQ9FlGJ45VHXSrZsblN4MJBrpa1hvgTaKsjg1gK6k5c7MswcS4xfYaT36F5nvoGA2JrkzvudYJoRwhFYtF66AnO3EEv"
 @              IN  TXT    "gT6pdcdbdouKWNhCno8K7Vg4zIus0VTTJQmtrPjA7Z6wvqBhCWkujya4SprLA3g8v2zB97Jj3ge2e0GtWuTdmite5GZk7qxAYuGFBq9xUTykAunqYCfSYBQUMf132ESEc42BwyQ4Ncxp5hppfI1hcNUYmE219YCaCQdu5DloMyMInExdJNtqR23oHZeBI6SzrL2Z5AtmteGi34qJDeKx15wkEr7bglLVeZyO3yTrxe6JuFRnCINFtxHK5hzwFFO"
